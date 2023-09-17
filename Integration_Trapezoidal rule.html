@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trapezoidal Rule</title>
+</head>
+<body>
+    <h2>Trapezoidal Rule for Integration</h2> <!-- Page heading -->
+
+    <!-- Brief description of the how the rule works -->
+    <p>
+        The trapezoidal rule is an integration method derived from a linear interpolation of the function f(x) 
+        and implying that the exact integral is approximated to the sum of individual trapezoids. 
+        (Yakimenko, Engineering Computations and Modeling in MATLAB®/Simulink®, 2020) 
+    </p>
+
+    <!-- Creating input fields to get user input -->
+    <label for="functionInput">Enter the function to integrate (e.g., x**3):</label>
+    <input type="text" id="functionInput"><br><br>
+
+    <label for="lowerBound">Enter the lower bound of the interval:</label>
+    <input type="number" id="lowerBound"><br><br>
+
+    <label for="upperBound">Enter the upper bound of the interval:</label>
+    <input type="number" id="upperBound"><br><br>
+
+    <label for="intervals">Enter the number of intervals:</label>
+    <input type="number" id="intervals"><br><br>
+
+    <!-- Button to calculate -->
+    <button id="calculateButton" onclick="calculateTrapezoidalRule()">Calculate</button>
+
+    <!-- Output result -->
+    <p id="result"></p>
+
+    <script>
+        // Function to calculate the integral problem using the trapezoidal rule
+        function calculateTrapezoidalRule() {
+        // Find result and user input from the input fields
+        const functionInput = document.getElementById("functionInput"); //declaring the function once user input is obtained
+        const UserlowerBound = document.getElementById("lowerBound"); //declaring the lower bound once user input is obtained
+        const UserUpperBound = document.getElementById("upperBound"); //declaring the upper bound once user input is obtained
+        const UserIntervals = document.getElementById("intervals"); //declaring the interval once user input is obtained
+        const calculateButton = document.getElementById("calculateButton"); 
+        const answer = document.getElementById("result"); 
+
+            // Get the user input values
+            const funcInput = functionInput.value;
+            const lowerBound = parseFloat(UserlowerBound.value); //parse the upper bound value as a string and return the first number
+            const upperBound = parseFloat(UserUpperBound.value); //parse the upper bound value as a string and return the first number
+            const intervals = parseInt(UserIntervals.value); //parse the intervals value as a string and return the first integer
+
+            // Check if the user entered valid input numbers
+            if (isNaN(lowerBound) || isNaN(upperBound) || isNaN(intervals)) {
+                answer.textContent = "Please enter valid numbers.";
+            } else {
+                // Create a new function from the user input
+                const userFunction = new Function('x', 'return ' + funcInput);
+
+                // Trapezoidal rule for numerical integration
+                function trapezoidalRule(func, a, b, n) {
+                    const h = (b - a) / n; //Width of each interval
+                    let integral = 0.5 * (func(a) + func(b)); // Initializing the average of the 2 limits
+
+                    // Sum the values of the function at each interval
+                    for (let i = 1; i < n; i++) {
+                        integral = integral + func(a + i * h);
+                    }
+
+                    return integral * h; //Calculate the approximate integral
+                }
+
+                // Calculating the approximate integral using the trapezoidal rule
+                const result = trapezoidalRule(userFunction, lowerBound, upperBound, intervals);
+
+                // Display the result to the user
+                answer.textContent = `Approximate integral using the trapezoidal rule is: ${result}`;
+            }
+        }
+    </script>
+</body>
+</html>
